@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ListView的头部 -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <RelativeLayout
+            android:id="@+id/head_root_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pullto_refresh_header_view_height"
+            android:gravity="bottom"
+            android:background="@android:color/white">
+
+        <LinearLayout
+                android:id="@+id/ptr_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <ImageView
+                    android:id="@+id/ptr_top_image"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="17dp"
+                    android:src="@drawable/pull_img"/>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                <Space
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.0"/>
+
+                <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/ptr_top_image"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginBottom="17dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="17dp">
+
+
+                    <severaldays.pulltorefreshlistview.view.LoadingProgressDrawable
+                            android:id="@+id/loading_progress_drawable"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_pull_refresh"/>
+                </FrameLayout>
+
+                <LinearLayout
+                        android:id="@+id/pull_to_refresh_text_panel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/ptr_top_image"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="17dp"
+                        android:layout_marginTop="17dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                    <TextView
+                            android:id="@+id/pull_to_refresh_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:textColor="#666"
+                            android:textSize="13.5sp"
+                            android:text="@string/pull_to_refresh_pull_label"/>
+
+                    <TextView
+                            android:id="@+id/pull_to_refresh_sub_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:textColor="#666"
+                            android:textSize="13.5sp"
+                            android:visibility="gone"/>
+                </LinearLayout>
+
+                <Space
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.0"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+</RelativeLayout>
