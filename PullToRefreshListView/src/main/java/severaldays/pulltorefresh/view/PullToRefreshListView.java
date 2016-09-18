@@ -1,4 +1,4 @@
-package severaldays.pulltorefreshlistview.view;
+package severaldays.pulltorefresh.view;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ListView;
 import android.widget.TextView;
-import severaldays.pulltorefreshlistview.R;
+import severaldays.pulltorefresh.R;
 
 /**
  * Created by LingJian·HE on 16/7/28.

@@ -1,4 +1,4 @@
-package severaldays.pulltorefreshlistview.view;
+package severaldays.pulltorefresh.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.widget.ImageView;
-import severaldays.pulltorefreshlistview.R;
+import severaldays.pulltorefresh.R;
 
 /**
  * Created by LingJian·HE on 16/7/28.

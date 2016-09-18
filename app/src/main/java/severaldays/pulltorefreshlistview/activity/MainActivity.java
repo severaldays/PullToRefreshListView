@@ -1,4 +1,4 @@
-package severaldays.pulltorefreshlistview;
+package severaldays.pulltorefreshlistview.activity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -8,7 +8,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
-import severaldays.pulltorefreshlistview.view.PullToRefreshListView;
+import severaldays.pulltorefresh.view.PullToRefreshListView;
+import severaldays.pulltorefreshlistview.R;
 
 /**
  * Created by LingJian·HE on 16/7/28.
@@ -18,19 +19,18 @@ public class MainActivity extends AppCompatActivity {
     private PullToRefreshListView listView;
     private ArrayAdapter<String> arrayAdapter;
     private Handler handler = new Handler();
-    private PullToRefreshListView.OnRefreshListener onRefreshListener = new PullToRefreshListView.OnRefreshListener() {
-        @Override
-        public void onRefresh() {
-            refresh();
-        }
-    };
     private Runnable refreshSuccessRunnable = new Runnable() {
         @Override
         public void run() {
             arrayAdapter.clear();
             arrayAdapter.addAll(generateDate());
-            listView.setAdapter(arrayAdapter);
             listView.onRefreshComplete();
+        }
+    };
+    private PullToRefreshListView.OnRefreshListener onRefreshListener = new PullToRefreshListView.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            refresh();
         }
     };
 

@@ -45,7 +45,7 @@
                         android:layout_marginTop="17dp">
 
 
-                    <severaldays.pulltorefreshlistview.view.LoadingProgressDrawable
+                    <severaldays.pulltorefresh.view.LoadingProgressDrawable
                             android:id="@+id/loading_progress_drawable"
                             android:layout_width="16dp"
                             android:layout_height="16dp"
