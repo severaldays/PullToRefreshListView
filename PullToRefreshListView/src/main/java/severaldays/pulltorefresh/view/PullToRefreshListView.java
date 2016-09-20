@@ -29,15 +29,17 @@ public class PullToRefreshListView extends ListView {
     private int state;
     private OnRefreshListener refreshListener;
     private ValueAnimator pullAnimator;
-    private LoadingProgressDrawable loadingProgressDrawable;
+    private PullToRefreshProgressDrawable pullToRefreshProgressDrawable;
     private TextView loadingProgressText;
 
     public PullToRefreshListView(Context context) {
-        this(context, null);
+        super(context);
+        init();
     }
 
     public PullToRefreshListView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
+        init();
     }
 
     public PullToRefreshListView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -46,16 +48,26 @@ public class PullToRefreshListView extends ListView {
     }
 
     private void init() {
+
         pullToRefreshHeight = getResources().getDimensionPixelSize(R.dimen.pullto_refresh_header_view_height);
         pullToRefreshView = LayoutInflater.from(getContext()).inflate(R.layout.pullto_refresh_head_view, null, false);
         pullToRefreshView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 0));
         pullToRefreshViewContainer = pullToRefreshView.findViewById(R.id.ptr_container);
         pullToRefreshView.setPadding(0, -pullToRefreshHeight, 0, 0);
         loadingProgressText = (TextView) pullToRefreshView.findViewById(R.id.pull_to_refresh_text);
-        loadingProgressDrawable =
-                (LoadingProgressDrawable) pullToRefreshView.findViewById(R.id.loading_progress_drawable);
+        pullToRefreshProgressDrawable =
+                (PullToRefreshProgressDrawable) pullToRefreshView.findViewById(R.id.loading_progress_drawable);
         addHeaderView(pullToRefreshView);
         state = RESET;
+    }
+
+    private int getFirstVisibleViewTop() {
+        View view = getChildAt(0);
+        if (view == null) {
+            return 0;
+        }
+        int top = -view.getTop();
+        return top;
     }
 
     @Override
@@ -83,21 +95,21 @@ public class PullToRefreshListView extends ListView {
 
             case MotionEvent.ACTION_MOVE:
                 int y = (int) event.getY();
+                int deltaY = (y - lastMotionY) / RATIO;
                 if (!isPullToRefreshing && getFirstVisiblePosition() == 0) {
                     isPullToRefreshing = true;
                     lastMotionY = y;
                 }
-                int deltaY = y - lastMotionY;
                 if (state != REFRESHING && isPullToRefreshing) {
                     if (state == RELEASE_TO_REFRESH) {
-                        if ((deltaY / RATIO < pullToRefreshHeight) && deltaY > 0) {
+                        if ((deltaY < pullToRefreshHeight) && deltaY > 0) {
                             setState(PULL_TO_REFRESH);
                         } else if (deltaY <= 0) {
                             setState(RESET);
                         }
                     }
                     if (state == PULL_TO_REFRESH) {
-                        if (deltaY / RATIO >= pullToRefreshViewContainer.getMeasuredHeight()) {
+                        if (deltaY >= pullToRefreshViewContainer.getMeasuredHeight()) {
                             setState(RELEASE_TO_REFRESH);
                         } else if (deltaY <= 0) {
                             setState(RESET);
@@ -109,9 +121,12 @@ public class PullToRefreshListView extends ListView {
                         }
                     }
                     if (state == PULL_TO_REFRESH) {
-                        updateHeaderView(-1 * pullToRefreshHeight + deltaY / RATIO);
+                        updateHeaderView(-1 * pullToRefreshHeight + deltaY);
                     } else if (state == RELEASE_TO_REFRESH) {
-                        updateHeaderView(deltaY / RATIO - pullToRefreshHeight);
+                        updateHeaderView(deltaY - pullToRefreshHeight);
+                    }
+                    if (pullToRefreshView.getPaddingTop() > -pullToRefreshHeight) {
+                        return true;
                     }
                 }
                 break;
@@ -124,7 +139,7 @@ public class PullToRefreshListView extends ListView {
     private void updateHeaderView(int paddingTop) {
         pullToRefreshView.setPadding(0, paddingTop, 0, 0);
         float process = (paddingTop + pullToRefreshHeight) * 1.0f / pullToRefreshHeight;
-        loadingProgressDrawable.setProgress(process);
+        pullToRefreshProgressDrawable.setProgress(process);
     }
 
     private void setState(int state) {
@@ -171,22 +186,22 @@ public class PullToRefreshListView extends ListView {
         animationToRefreshPosition(pullToRefreshViewContainer.getMeasuredHeight() - pullToRefreshHeight);
         if (refreshListener != null) {
             refreshListener.onRefresh();
-            if (loadingProgressDrawable != null) {
-                loadingProgressDrawable.start();
+            if (pullToRefreshProgressDrawable != null) {
+                pullToRefreshProgressDrawable.start();
             }
             loadingProgressText.setText(getResources().getString(R.string.refresh_refreshing_label));
         }
     }
 
     private void animationToRefreshPosition(int toPosition) {
-        pullAnimator = ValueAnimator.ofFloat(pullToRefreshView.getPaddingTop(), toPosition);
+        pullAnimator = ValueAnimator.ofFloat(pullToRefreshView.getPaddingTop(), toPosition + getFirstVisibleViewTop());
         pullAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float value = (float) animation.getAnimatedValue();
                 pullToRefreshView.setPadding(0, (int) value, 0, 0);
                 if (-1 * pullToRefreshHeight == value) {
-                    loadingProgressDrawable.stop();
+                    pullToRefreshProgressDrawable.stop();
                 }
             }
         });

@@ -11,7 +11,7 @@ import severaldays.pulltorefresh.R;
 /**
  * Created by LingJian·HE on 16/7/28.
  */
-public class LoadingProgressDrawable extends ImageView {
+public class PullToRefreshProgressDrawable extends ImageView {
 
     private static final int ANIMATION_START = 0;
     private static final int ANIMATION_STOP = 1;
@@ -47,15 +47,15 @@ public class LoadingProgressDrawable extends ImageView {
         }
     };
 
-    public LoadingProgressDrawable(Context context) {
+    public PullToRefreshProgressDrawable(Context context) {
         this(context, null);
     }
 
-    public LoadingProgressDrawable(Context context, AttributeSet attrs) {
+    public PullToRefreshProgressDrawable(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public LoadingProgressDrawable(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PullToRefreshProgressDrawable(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
